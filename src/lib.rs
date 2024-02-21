@@ -34,3 +34,29 @@ fn fast_geo_distance(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(batch_geodesic, m)?)?;
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::*;
+
+    const LATITUDE_A: f64 = 11.572231488797142;
+    const LONGITUDE_A: f64 = 48.14000452866368;
+    const LATITUDE_B: f64 = 52.5170365;
+    const LONGITUDE_B: f64 = 13.3888599;
+    const DISTANCE: f64 = 5388768.0;
+
+    #[test]
+    fn test_geodesic() {
+        let distance: f64 = geodesic(LATITUDE_A, LONGITUDE_A, LATITUDE_B, LONGITUDE_B).unwrap();
+        
+        assert_eq!(distance.round(), DISTANCE);
+    }
+
+    #[test]
+    fn test_batch_geodesic() {
+        let points_of_interest: Vec<(f64, f64)> = vec![(LATITUDE_B, LONGITUDE_B)];
+        let distances: Vec<f64> = batch_geodesic(LATITUDE_A, LONGITUDE_A, points_of_interest).unwrap();
+        
+        assert_eq!(distances[0].round(), DISTANCE);
+    }
+}
