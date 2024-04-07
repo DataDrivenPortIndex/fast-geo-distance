@@ -10,6 +10,8 @@ fn geodesic(latitude_a: f64, longitude_a: f64, latitude_b: f64, longitude_b: f64
 
     let distance: f64 = point_a.geodesic_distance(&point_b);
 
+    println!("{}", distance);
+
     Ok(distance)
 }
 
