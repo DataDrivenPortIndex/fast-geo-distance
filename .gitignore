@@ -13,7 +13,6 @@ __pycache__/
 .venv/
 env/
 bin/
-build/
 develop-eggs/
 dist/
 eggs/
@@ -52,10 +51,6 @@ coverage.xml
 
 # Rope
 .ropeproject
-
-# Django stuff:
-*.log
-*.pot
 
 .DS_Store
 
