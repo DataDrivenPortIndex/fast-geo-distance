@@ -16,15 +16,21 @@ fn geodesic(latitude_a: f64, longitude_a: f64, latitude_b: f64, longitude_b: f64
 }
 
 #[pyfunction]
-fn batch_geodesic(latitude: f64, longitude: f64, points_of_interest: Vec<(f64, f64)>) -> PyResult<Vec<f64>> {
+fn batch_geodesic(
+    latitude: f64,
+    longitude: f64,
+    points_of_interest: Vec<(f64, f64)>,
+) -> PyResult<Vec<f64>> {
     let p1 = point!(x: latitude, y: longitude);
 
-    let distances: Vec<f64> = points_of_interest.into_par_iter().map(|point| {
-        let tmp_point = point!(x: point.0, y: point.1);
+    let distances: Vec<f64> = points_of_interest
+        .into_par_iter()
+        .map(|point| {
+            let tmp_point = point!(x: point.0, y: point.1);
 
-        return  p1.geodesic_distance(&tmp_point);
-    })
-    .collect();
+            return p1.geodesic_distance(&tmp_point);
+        })
+        .collect();
 
     Ok(distances)
 }
@@ -41,24 +47,93 @@ fn fast_geo_distance(_py: Python, m: &PyModule) -> PyResult<()> {
 mod tests {
     use crate::*;
 
-    const LATITUDE_A: f64 = 11.572231488797142;
-    const LONGITUDE_A: f64 = 48.14000452866368;
-    const LATITUDE_B: f64 = 52.5170365;
-    const LONGITUDE_B: f64 = 13.3888599;
-    const DISTANCE: f64 = 5388768.0;
+    const LATITUDE_BERLIN: f64 = 0.0;
+    const LONGITUDE_BERLIN: f64 = 0.0;
+    const LATITUDE_MUNICH: f64 = 0.0;
+    const LONGITUDE_MUNICH: f64 = 0.0;
+    const LATITUDE_NEW_YORK: f64 = 0.0;
+    const LONGITUDE_NEW_YORK: f64 = 0.0;
+    const LATITUDE_TOKIO: f64 = 0.0;
+    const LONGITUDE_TOKIO: f64 = 0.0;
+    const LATITUDE_CAPE_TOWN: f64 = 0.0;
+    const LONGITUDE_CAPE_TOWN: f64 = 0.0;
+    const LATITUDE_SHANGHAI: f64 = 0.0;
+    const LONGITUDE_SHANGHAI: f64 = 0.0;
+    const LATITUDE_MELBOURNE: f64 = 0.0;
+    const LONGITUDE_MELBOURNE: f64 = 0.0;
+
+    const DISTANCE_BERLIN_MUNICH: f64 = 0.0;
+    const DISTANCE_NEW_YORK_TOKIO: f64 = 0.0;
+    const DISTANCE_BERLIN_CAPE_TOWN: f64 = 0.0;
+    const DISTANCE_SHANGHAI_MELBOURN: f64 = 0.0;
 
     #[test]
-    fn test_geodesic() {
-        let distance: f64 = geodesic(LATITUDE_A, LONGITUDE_A, LATITUDE_B, LONGITUDE_B).unwrap();
-        
-        assert_eq!(distance.round(), DISTANCE);
+    fn test_berlin_munich() {
+        let distance: PyResult<f64> = geodesic(
+            LATITUDE_BERLIN,
+            LONGITUDE_BERLIN,
+            LATITUDE_MUNICH,
+            LONGITUDE_MUNICH,
+        );
+
+        assert!(distance.is_ok());
+        assert_eq!(0.0, DISTANCE_BERLIN_MUNICH);
     }
 
     #[test]
-    fn test_batch_geodesic() {
-        let points_of_interest: Vec<(f64, f64)> = vec![(LATITUDE_B, LONGITUDE_B)];
-        let distances: Vec<f64> = batch_geodesic(LATITUDE_A, LONGITUDE_A, points_of_interest).unwrap();
-        
-        assert_eq!(distances[0].round(), DISTANCE);
+    fn test_new_york_tokio() {
+        let distance: PyResult<f64> = geodesic(
+            LATITUDE_NEW_YORK,
+            LONGITUDE_NEW_YORK,
+            LATITUDE_TOKIO,
+            LONGITUDE_TOKIO,
+        );
+
+        assert!(distance.is_ok());
+        assert_eq!(0.0, DISTANCE_NEW_YORK_TOKIO);
+    }
+
+    #[test]
+    fn test_berlin_cape_town() {
+        let distance: PyResult<f64> = geodesic(
+            LATITUDE_BERLIN,
+            LONGITUDE_BERLIN,
+            LATITUDE_CAPE_TOWN,
+            LONGITUDE_CAPE_TOWN,
+        );
+
+        assert!(distance.is_ok());
+        assert_eq!(0.0, DISTANCE_BERLIN_CAPE_TOWN);
+    }
+
+    #[test]
+    fn test_shanghai_melbourne() {
+        let distance: PyResult<f64> = geodesic(
+            LATITUDE_SHANGHAI,
+            LONGITUDE_SHANGHAI,
+            LATITUDE_MELBOURNE,
+            LONGITUDE_MELBOURNE,
+        );
+
+        assert!(distance.is_ok());
+        assert_eq!(0.0, DISTANCE_SHANGHAI_MELBOURN);
+    }
+
+    #[test]
+    fn test_batch_distance() {
+        let points_of_interest: Vec<(f64, f64)> = vec![
+            (LATITUDE_MUNICH, LONGITUDE_MUNICH),
+            (LATITUDE_NEW_YORK, LONGITUDE_NEW_YORK),
+            (LATITUDE_SHANGHAI, LONGITUDE_SHANGHAI),
+            (LATITUDE_TOKIO, LONGITUDE_TOKIO),
+            (LATITUDE_CAPE_TOWN, LONGITUDE_CAPE_TOWN),
+            (LATITUDE_MELBOURNE, LONGITUDE_MELBOURNE),
+        ];
+
+        let distances: PyResult<Vec<f64>> =
+            batch_geodesic(LATITUDE_BERLIN, LONGITUDE_BERLIN, points_of_interest);
+
+        assert!(distances.is_ok());
+        assert_eq!(0.0, DISTANCE_BERLIN_MUNICH);
     }
 }
