@@ -1,1 +1,1 @@
-## FAST-Geo-Distance
+## Fast-Geo-Distance
