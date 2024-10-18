@@ -10,12 +10,10 @@ pub fn geodesic(
     latitude_b: f64,
     longitude_b: f64,
 ) -> PyResult<f64> {
-    let point_a = point!(x: latitude_a, y: longitude_a);
-    let point_b = point!(x: latitude_b, y: longitude_b);
+    let point_a = point!(x: longitude_a, y: latitude_a);
+    let point_b = point!(x: longitude_b, y: latitude_b);
 
     let distance: f64 = point_a.geodesic_distance(&point_b);
-
-    println!("{}", distance);
 
     Ok(distance)
 }
@@ -26,12 +24,12 @@ pub fn batch_geodesic(
     longitude: f64,
     points_of_interest: Vec<(f64, f64)>,
 ) -> PyResult<Vec<f64>> {
-    let p1 = point!(x: latitude, y: longitude);
+    let p1 = point!(x: longitude, y: latitude);
 
     let distances: Vec<f64> = points_of_interest
         .into_par_iter()
         .map(|point| {
-            let tmp_point = point!(x: point.0, y: point.1);
+            let tmp_point = point!(x: point.1, y: point.0);
 
             return p1.geodesic_distance(&tmp_point);
         })
