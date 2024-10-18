@@ -6,25 +6,25 @@ use fast_geo_distance::*;
 mod tests {
     use crate::*;
 
-    const LATITUDE_BERLIN: f64 = 0.0;
-    const LONGITUDE_BERLIN: f64 = 0.0;
-    const LATITUDE_MUNICH: f64 = 0.0;
-    const LONGITUDE_MUNICH: f64 = 0.0;
-    const LATITUDE_NEW_YORK: f64 = 0.0;
-    const LONGITUDE_NEW_YORK: f64 = 0.0;
-    const LATITUDE_TOKIO: f64 = 0.0;
-    const LONGITUDE_TOKIO: f64 = 0.0;
-    const LATITUDE_CAPE_TOWN: f64 = 0.0;
-    const LONGITUDE_CAPE_TOWN: f64 = 0.0;
-    const LATITUDE_SHANGHAI: f64 = 0.0;
-    const LONGITUDE_SHANGHAI: f64 = 0.0;
-    const LATITUDE_MELBOURNE: f64 = 0.0;
-    const LONGITUDE_MELBOURNE: f64 = 0.0;
+    const LATITUDE_BERLIN: f64 = 52.518992275104445;
+    const LONGITUDE_BERLIN: f64 = 13.404800164623978;
+    const LATITUDE_MUNICH: f64 = 48.140313048369265;
+    const LONGITUDE_MUNICH: f64 = 11.563939007231188;
+    const LATITUDE_NEW_YORK: f64 = 40.657439489432036;
+    const LONGITUDE_NEW_YORK: f64 = -73.94123044208536;
+    const LATITUDE_TOKIO: f64 = 35.6899224389031;
+    const LONGITUDE_TOKIO: f64 = 139.66391017186552;
+    const LATITUDE_CAPE_TOWN: f64 = -33.97404971258781;
+    const LONGITUDE_CAPE_TOWN: f64 = 18.557786310359266;
+    const LATITUDE_SHANGHAI: f64 = 31.091132143208924;
+    const LONGITUDE_SHANGHAI: f64 = 121.46984034713057;
+    const LATITUDE_MELBOURNE: f64 = -37.79549518995617;
+    const LONGITUDE_MELBOURNE: f64 = 144.98909973260731;
 
-    const DISTANCE_BERLIN_MUNICH: f64 = 0.0;
-    const DISTANCE_NEW_YORK_TOKIO: f64 = 0.0;
-    const DISTANCE_BERLIN_CAPE_TOWN: f64 = 0.0;
-    const DISTANCE_SHANGHAI_MELBOURN: f64 = 0.0;
+    const DISTANCE_BERLIN_MUNICH: f64 = 504347.6524001972;
+    const DISTANCE_NEW_YORK_TOKIO: f64 = 10881784.370794715;
+    const DISTANCE_SHANGHAI_MELBOURN: f64 = 8008368.494128226;
+    const DISTANCE_BERLIN_CAPE_TOWN: f64 = 9594984.883884622;
 
     #[test]
     fn test_berlin_munich() {
@@ -36,7 +36,7 @@ mod tests {
         );
 
         assert!(distance.is_ok());
-        assert_eq!(0.0, DISTANCE_BERLIN_MUNICH);
+        assert_eq!(distance.unwrap(), DISTANCE_BERLIN_MUNICH);
     }
 
     #[test]
@@ -49,7 +49,7 @@ mod tests {
         );
 
         assert!(distance.is_ok());
-        assert_eq!(0.0, DISTANCE_NEW_YORK_TOKIO);
+        assert_eq!(distance.unwrap(), DISTANCE_NEW_YORK_TOKIO);
     }
 
     #[test]
@@ -62,7 +62,7 @@ mod tests {
         );
 
         assert!(distance.is_ok());
-        assert_eq!(0.0, DISTANCE_BERLIN_CAPE_TOWN);
+        assert_eq!(distance.unwrap(), DISTANCE_BERLIN_CAPE_TOWN);
     }
 
     #[test]
@@ -75,7 +75,7 @@ mod tests {
         );
 
         assert!(distance.is_ok());
-        assert_eq!(0.0, DISTANCE_SHANGHAI_MELBOURN);
+        assert_eq!(distance.unwrap(), DISTANCE_SHANGHAI_MELBOURN);
     }
 
     #[test]
@@ -93,6 +93,6 @@ mod tests {
             batch_geodesic(LATITUDE_BERLIN, LONGITUDE_BERLIN, points_of_interest);
 
         assert!(distances.is_ok());
-        assert_eq!(0.0, DISTANCE_BERLIN_MUNICH);
+        assert_eq!(distances.unwrap()[0], DISTANCE_BERLIN_MUNICH);
     }
 }
