@@ -15,13 +15,6 @@ pub fn geodesic(
     Ok(d_m)
 }
 
-/// A Python module implemented in Rust.
-#[pymodule]
-fn fast_geo_distance(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(geodesic, m)?)?;
-    Ok(())
-}
-
 #[pyfunction]
 pub fn batch_geodesic(
     latitude: f64,
@@ -40,4 +33,12 @@ pub fn batch_geodesic(
         .collect();
 
     Ok(distances)
+}
+
+/// A Python module implemented in Rust.
+#[pymodule]
+fn fast_geo_distance(_py: Python, m: &PyModule) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(geodesic, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_geodesic, m)?)?;
+    Ok(())
 }
