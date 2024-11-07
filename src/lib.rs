@@ -1,5 +1,4 @@
-use geo::point;
-use geo::prelude::*;
+use geographiclib::Geodesic;
 use pyo3::prelude::*;
 use rayon::prelude::*;
 
@@ -10,12 +9,17 @@ pub fn geodesic(
     latitude_b: f64,
     longitude_b: f64,
 ) -> PyResult<f64> {
-    let point_a = point!(x: longitude_a, y: latitude_a);
-    let point_b = point!(x: longitude_b, y: latitude_b);
+    let g = Geodesic::wgs84();
+    let (_d_deg, d_m, _az1, _az2) = g.inverse(latitude_a, longitude_a, latitude_b, longitude_b);
 
-    let distance: f64 = point_a.geodesic_distance(&point_b);
+    Ok(d_m)
+}
 
-    Ok(distance)
+/// A Python module implemented in Rust.
+#[pymodule]
+fn fast_geo_distance(_py: Python, m: &PyModule) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(geodesic, m)?)?;
+    Ok(())
 }
 
 #[pyfunction]
@@ -24,24 +28,16 @@ pub fn batch_geodesic(
     longitude: f64,
     points_of_interest: Vec<(f64, f64)>,
 ) -> PyResult<Vec<f64>> {
-    let p1 = point!(x: longitude, y: latitude);
+    let g = Geodesic::wgs84();
 
     let distances: Vec<f64> = points_of_interest
         .into_par_iter()
         .map(|point| {
-            let tmp_point = point!(x: point.1, y: point.0);
+            let (_d_deg, d_m, _az1, _az2) =g.inverse(latitude, longitude, point.0, point.1);
 
-            return p1.geodesic_distance(&tmp_point);
+            return d_m;
         })
         .collect();
 
     Ok(distances)
-}
-
-/// A Python module implemented in Rust.
-#[pymodule]
-fn fast_geo_distance(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(geodesic, m)?)?;
-    m.add_function(wrap_pyfunction!(batch_geodesic, m)?)?;
-    Ok(())
 }

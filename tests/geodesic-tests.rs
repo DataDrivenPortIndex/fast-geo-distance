@@ -1,6 +1,7 @@
 use pyo3::prelude::*;
+use fast_geo_distance::geodesic;
+use fast_geo_distance::batch_geodesic;
 
-use fast_geo_distance::*;
 
 #[cfg(test)]
 mod tests {
@@ -21,10 +22,10 @@ mod tests {
     const LATITUDE_MELBOURNE: f64 = -37.79549518995617;
     const LONGITUDE_MELBOURNE: f64 = 144.98909973260731;
 
-    const DISTANCE_BERLIN_MUNICH: f64 = 504347.6524001972;
+    const DISTANCE_BERLIN_MUNICH: f64 = 504347.652400197;
     const DISTANCE_NEW_YORK_TOKIO: f64 = 10881784.370794715;
-    const DISTANCE_SHANGHAI_MELBOURN: f64 = 8008368.494128226;
-    const DISTANCE_BERLIN_CAPE_TOWN: f64 = 9594984.883884622;
+    const DISTANCE_SHANGHAI_MELBOURN: f64 = 8008368.494128224;
+    const DISTANCE_BERLIN_CAPE_TOWN: f64 = 9594984.883884624;
 
     #[test]
     fn test_berlin_munich() {
